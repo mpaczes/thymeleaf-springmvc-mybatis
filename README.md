@@ -1,4 +1,4 @@
-(1) Aplikacja wykorzystuje następujące technologie : Java, Spring, Apache Tomcat 9, H2, MyBatis, i18n.
+(1) Aplikacja wykorzystuje następujące technologie : Java, Spring, Thymeleaf, Apache Tomcat 9, H2, MyBatis, i18n.
 
 (2) Budowanie projektu :
 
