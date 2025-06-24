@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+       xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+     						http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+     						http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+     						http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+     						http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd
+     						http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+	<!--
+    <jdbc:embedded-database id="dataSource">
+        <jdbc:script location="classpath:database/jpetstore-hsqldb-schema.sql"/>
+        <jdbc:script location="classpath:database/jpetstore-hsqldb-dataload.sql"/>
+    </jdbc:embedded-database>
+    -->
+    
+    <bean class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close" id="dataSource">
+	    <property name="driverClassName" value="org.h2.Driver" />
+	    <property name="url" value="jdbc:h2:mem:thymeleaf-h2-db" />
+	    <property name="username" value="sa" />
+	    <property name="password" value="" />
+	</bean>
+	
+	<jdbc:initialize-database data-source="dataSource">
+	    <jdbc:script location="classpath:database/jpetstore-hsqldb-schema.sql"/>
+        <jdbc:script location="classpath:database/jpetstore-hsqldb-dataload.sql"/>
+	 </jdbc:initialize-database>
+    
+    <!-- transaction manager, use DataSourceTransactionManager" for JDBC local tx -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    
+    <bean id="springTemplateResolver"
+          class="org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver">
+        <property name="prefix" value="/WEB-INF/pages/"/>
+        <property name="suffix" value=".html"/>
+        <property name="templateMode" value="HTML5"/>
+    </bean>
+    
+    <bean id="templateEngine"
+	      class="org.thymeleaf.spring5.SpringTemplateEngine">
+	    <property name="templateResolver" ref="springTemplateResolver" />
+	</bean>
+	
+	<bean class="org.thymeleaf.spring5.view.ThymeleafViewResolver">
+	    <property name="templateEngine" ref="templateEngine" />
+	</bean>
+
+    <mvc:annotation-driven/>
+    <mvc:default-servlet-handler/>
+
+    <!-- enable component scanning and autowire (beware that this does not enable mapper scanning!) -->
+    <context:component-scan base-package="controller,service" />
+
+    <!-- enable transaction demarcation with annotations -->
+    <tx:annotation-driven />
+
+    <!-- define the SqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="typeAliasesPackage" value="domain" />
+    </bean>
+
+    <!-- scan for mappers and let them be autowired -->
+    <mybatis:scan base-package="mapper" />
+</beans>
