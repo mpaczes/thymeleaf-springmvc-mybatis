@@ -7,5 +7,9 @@
 	<body>
 		<p th:text="${message}">Test połączenia z bazą danych ...</p>
 		<p th:text="#{congrats}">Gratulacje</p>
+		<h2 th:text="#{category-list}">Lista kategorii</h2>
+		<ul>
+			<li th:each="category : ${categoryList}" th:text="|${category.name} - ${category.description}|">Kategoria</li>
+		</ul>
 	</body>
 </html>

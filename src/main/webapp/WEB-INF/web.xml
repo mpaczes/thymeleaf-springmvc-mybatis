@@ -31,5 +31,23 @@
 		<servlet-name>app</servlet-name>
 		<url-pattern>/app/*</url-pattern>
 	</servlet-mapping>
+	
+	<!-- H2 Database Console for managing the app's database -->
+	<!-- http://localhost:8080/spring_web_mvc/admin/h2/ -->
+	<servlet>
+	    <servlet-name>H2Console</servlet-name>
+	    <servlet-class>org.h2.server.web.WebServlet</servlet-class>
+	    <init-param>
+	        <param-name>-webAllowOthers</param-name>
+	        <param-value>true</param-value>
+	    </init-param>
+	    <load-on-startup>2</load-on-startup>
+	</servlet>
+	
+	<servlet-mapping>
+	    <servlet-name>H2Console</servlet-name>
+	    <url-pattern>/admin/h2/*</url-pattern>
+	</servlet-mapping>
+	
 
 </web-app>
