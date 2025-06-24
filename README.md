@@ -10,4 +10,4 @@
 
 (4) dostęp do konsoli H2 z przeglądarki :
 
-    http://localhost:8080/spring_web_mvc/app/testPolaczenia
+    http://localhost:8080/spring_web_mvc/admin/h2/
